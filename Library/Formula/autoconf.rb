@@ -1,34 +1,38 @@
 require 'formula'
 
+# Documentation: https://github.com/mxcl/homebrew/wiki/Formula-Cookbook
+#                /usr/local/Library/Contributions/example-formula.rb
+# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
+
 class Autoconf < Formula
-  homepage 'http://www.gnu.org/software/autoconf'
-  url 'http://ftpmirror.gnu.org/autoconf/autoconf-2.69.tar.gz'
-  mirror 'http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz'
+  homepage ''
+  url 'http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz'
   sha1 '562471cbcb0dd0fa42a76665acf0dbb68479b78a'
 
-  bottle do
-    sha1 '2b69898b2827740e5983e25c7f20c0328201b256' => :mavericks
-    sha1 'ec30045d8fe4be10858b66d59f029fb19fe63b5e' => :mountain_lion
-    sha1 'e7d6d88e762996c2fb96238f7d9e48e6d0feaeba' => :lion
-  end
-
-  if MacOS::Xcode.provides_autotools? or File.file? "/usr/bin/autoconf"
-    keg_only "Xcode (up to and including 4.2) provides (a rather old) Autoconf."
-  end
+  # depends_on 'cmake' => :build
+  depends_on :x11 # if your formula requires any X11/XQuartz components
 
   def install
-    ENV['PERL'] = '/usr/bin/perl'
+    # ENV.j1  # if your formula's build system can't parallelize
 
-    # force autoreconf to look for and use our glibtoolize
-    inreplace 'bin/autoreconf.in', 'libtoolize', 'glibtoolize'
-    # also touch the man page so that it isn't rebuilt
-    inreplace 'man/autoreconf.1', 'libtoolize', 'glibtoolize'
-    system "./configure", "--prefix=#{prefix}"
-    system "make install"
+    # Remove unrecognized options if warned by configure
+    system "./configure", "--disable-debug",
+                          "--disable-dependency-tracking",
+                          "--disable-silent-rules",
+                          "--prefix=#{prefix}"
+    # system "cmake", ".", *std_cmake_args
+    system "make", "install" # if this fails, try separate make/make install steps
   end
 
   test do
-    cp "#{share}/autoconf/autotest/autotest.m4", 'autotest.m4'
-    system "#{bin}/autoconf", 'autotest.m4'
+    # `test do` will create, run in and delete a temporary directory.
+    #
+    # This test will fail and we won't accept that! It's enough to just replace
+    # "false" with the main program this formula installs, but it'd be nice if you
+    # were more thorough. Run the test with `brew test autoconf`.
+    #
+    # The installed folder is not in the path, so use the entire path to any
+    # executables being tested: `system "#{bin}/program", "--version"`.
+    system "false"
   end
 end

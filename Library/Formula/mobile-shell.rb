@@ -23,7 +23,7 @@ class MobileShell < Formula
     # Upstream prefers O2:
     # https://github.com/keithw/mosh/blob/master/README.md
     ENV.O2
-    system "./configure", "--prefix=#{prefix}", "--enable-completion"
+    system "./configure", "--enable-server", "--prefix=#{prefix}", "--enable-completion"
     system "make install"
   end
 end

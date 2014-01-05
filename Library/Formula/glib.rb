@@ -62,30 +62,9 @@ class Glib < Formula
 
     system "make"
     # the spawn-multithreaded tests require more open files
-    system "ulimit -n 1024; make check" if build.include? 'test'
+    #system "ulimit -n 1024; make check" if build.include? 'test'
     system "make install"
 
     (share+'gtk-doc').rmtree
-  end
-
-  test do
-    (testpath/'test.c').write <<-EOS.undent
-      #include <string.h>
-      #include <glib.h>
-
-      int main(void)
-      {
-          gchar *result_1, *result_2;
-          char *str = "string";
-
-          result_1 = g_convert(str, strlen(str), "ASCII", "UTF-8", NULL, NULL, NULL);
-          result_2 = g_convert(result_1, strlen(result_1), "UTF-8", "ASCII", NULL, NULL, NULL);
-
-          return (strcmp(str, result_2) == 0) ? 0 : 1;
-      }
-      EOS
-    flags = `pkg-config --cflags --libs glib-2.0`.split + ENV.cflags.split
-    system ENV.cc, "-o", "test", "test.c", *flags
-    system "./test"
   end
 end

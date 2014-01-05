@@ -8,7 +8,7 @@ class Cryptopp < Formula
 
   def install
     # patches welcome to re-enable this on configurations that support it
-    ENV.append 'CXXFLAGS', '-DCRYPTOPP_DISABLE_ASM'
+    ENV.append 'CXXFLAGS', '-DCRYPTOPP_DISABLE_ASM -shared'
 
     system "make", "CXX=#{ENV.cxx}", "CXXFLAGS=#{ENV.cxxflags}"
     lib.install "libcryptopp.a"
