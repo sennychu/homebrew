@@ -20,8 +20,8 @@ class Wine < Formula
   end
 
   devel do
-    url 'http://downloads.sourceforge.net/project/wine/Source/wine-1.7.7.tar.bz2'
-    sha256 '110603b6bff33441356ef6e72f94a70abf3b4822be1f0fb6c84b5240e9d5aca7'
+    url 'http://downloads.sourceforge.net/project/wine/Source/wine-1.7.9.tar.bz2'
+    sha256 '79f99ecc24696915439c474c4953bb77652ab53f16b41daa4da270fe43279c5a'
     depends_on 'little-cms2'
   end
 
@@ -80,7 +80,7 @@ class Wine < Formula
   # libncurses.5.4.dylib, and fails to find it without the fallback path.
 
   def library_path
-    path = %W[#{HOMEBREW_PREFIX}/lib /usr/lib]
+    paths = %W[#{HOMEBREW_PREFIX}/lib /usr/lib]
     paths.unshift(MacOS::X11.lib) unless build.without? 'x11'
     paths.join(':')
   end
